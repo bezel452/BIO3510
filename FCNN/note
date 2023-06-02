@@ -1,1 +1,9 @@
+更新于2023.6.2
 fcnn
+有两个临床的属性和死亡有一定相关，overall_survival本身就是死亡相关系数很高，overall_survival_months也有一定程度的相关性，这两个属性不适合被放在input中，依次删去后模型预测能力下降。
+还有一个问题，网络在训练时，会出现梯度消失，loss降至0，无法继续训练。采取权重衰减的方法一定程度改善了这一问题：
+    # 定义L2正则化
+    weight_decay = 0.001
+    optimizer = optim.Adam(model.parameters(), lr=0.01, weight_decay=weight_decay)
+利用PCA得到的列预测直观上改善了一点点性能，但整体模型的预测准确度比较低，在0.6多一点的水平。
+
