@@ -1,0 +1,1 @@
+'age_at_diagnosis', 'pam50_._claudin.low_subtype', 'cohort','integrative_cluster', 'lymph_nodes_examined_positive','mutation_count', 'nottingham_prognostic_index', 'tumor_size'
