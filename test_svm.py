@@ -5,7 +5,7 @@ if __name__ == '__main__':
     accuracy = []
     seeds = []
     for i in range(0, 1001):
-        accuracy.append(work(i))
+        accuracy.append(work(i, True))
         seeds.append(i)
 
     plt.plot(seeds, accuracy)
