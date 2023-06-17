@@ -1,11 +1,10 @@
 from sklearn import svm
 import pandas as pd
 from sklearn.metrics import roc_curve, auc, precision_recall_curve, average_precision_score
-import eli5
-from eli5.sklearn import PermutationImportance
-import pickle
 import matplotlib.pyplot as plt
 from matplotlib import rc
+from sklearn.inspection import permutation_importance
+import csv
 
 file_path = "Data/clean_data_final.csv"
 
@@ -31,6 +30,8 @@ def work(epoch, flag):
     print("准确率:", acc)
     if flag == True:
         return acc
+    
+    # calculate the AUC and draw the ROC figure
     pre_y = model.predict_proba(test_x)
     pre_y = pre_y[:,1]
     fpr, tpr, thresholds = roc_curve(test_y, pre_y, pos_label=1)
@@ -49,11 +50,19 @@ def work(epoch, flag):
     plt.savefig("ROC_SVM.png")
     plt.show()
 
+    # feature importance
+    res = permutation_importance(model, test_x, test_y)
+    imp = res.importances_mean
+    p = list(zip(test_x.columns.tolist(), imp))
+    p = sorted(p, key=lambda x: x[1], reverse=True)
+    print(p)
+    with open("featimpor_SVM.csv", "w") as f:
+        writer = csv.writer(f)
+        header = ["Features", "Weights"]
+        writer.writerow(header)
+        writer.writerows(p)
     return acc
-'''
-imp = PermutationImportance(model).fit(test_x, test_y)
-eli5.show_weights(imp, feature_names = test_x.columns.tolist())
-'''
+
 
 if __name__ == '__main__':
     work(983, False)
